@@ -81,4 +81,27 @@
     }
 }
 
+@media screen and (max-width: 859px){
 
+    .controleHome h1{
+    font-size: 4rem;
+    }
+    .controleHome h2{
+        font-size: 3rem;
+    }
+    
+}
+@media screen and (max-width: 500px){
+
+    .controleHome h1{
+    font-size: 3rem;
+    }
+    .controleHome h2{
+        font-size: 2rem;
+    }
+    .textos p {
+        width: 200px;
+        font-size: 2rem;
+        padding: 2%;
+    } 
+}
