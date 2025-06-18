@@ -1,0 +1,109 @@
+
+.controleHeader{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    width: 320px;
+    height: 100vh;
+    box-shadow: 26px 0px 19px -38px black;
+    z-index: 10;
+    position: static;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    
+}
+
+
+.controleHeader img{
+    width: 5rem;
+    padding: 10px;
+}
+nav {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 2rem;
+    transition: all .5s;
+    
+}
+
+
+.controleOpcoes {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 2rem;
+    list-style: none;
+    transition: all ease-in-out 1s;
+}
+.controleGrupos {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: row;
+    cursor: pointer;
+    transition: padding 0.3s ease;
+}
+.controleGrupos i {
+    font-size: 1.5rem;
+    padding: 0 10px;
+}
+
+.opcoes{
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.opcoes li{
+    cursor: pointer;
+    padding: 5px;
+    list-style: none;
+}
+
+/*                       Menu Barra Header                        */
+
+.controleHeader.recolhido {
+    width: 90px; /* Ajuste conforme necessário */
+  
+}
+.controleHeader.recolhido h2,
+.controleHeader.recolhido .opcoes 
+{
+    display: none;
+    
+}
+
+.controleHeader.recolhido .controleMenu img {
+    width: 60px;
+    margin: 0 auto;
+}
+.controleMenu i:active{
+    transform: scale(2);
+    color: white;    
+    transition-duration: 0s;
+}
+.fechar{
+    font-size: 3rem;
+    position: relative;
+    left: 90px;
+    cursor: pointer;
+    color: rgb(0, 140, 255);
+    transition: all 1s;
+}
+.abrir{
+    font-size: 3rem;
+    position: relative;
+    cursor: pointer;
+    color: rgb(0, 140, 255);
+    transition: all .5s;
+}

@@ -1,0 +1,84 @@
+
+.controleHome{
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(252, 251, 204);
+}
+.controleHome .textos{
+    border-radius: 50px;
+    width: 90%;
+    height: 600px;
+    padding: 20px;
+    background-color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0px 0px 17px -14px black;
+    transition: all .5;
+}
+.controleHome h1{
+    color:  rgb(0, 153, 255);
+    font-size: 6rem;
+    font-weight: bold;
+}
+.controleHome h2{
+    white-space: nowrap;
+    color: rgba(255, 217, 0, 0.63);
+    font-size: 5rem;
+    font-weight: bold;
+}
+.textos p{
+
+    transition: all .5;
+}
+
+.textos p {
+    margin-top: 10px;
+    text-align: center;
+    width: 320px;
+    font-size: 2rem;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 50px;
+    color: white;
+    background-color: rgb(0, 153, 255);
+    height: auto;
+    
+
+
+    position: relative; /* Para o funcionamento do [FLUTUAR] */
+    animation: flutuar
+               1s         /* 2s de duração da animação */
+               ease-in-out/* início e fim suave, rápido no centro*/
+               infinite   /* Mantém em loop */
+               alternate; /* Mantém alternando - ajuda na suavidade */
+
+    transition: all 1s;
+} 
+
+.textos p:hover{
+    transform: scale(1.09);
+    color: yellow;
+    transition-duration: 0s;
+}
+
+
+
+@keyframes flutuar {
+    0%{
+        top: 0px;
+    }
+    100%{
+        top: 20px;
+    }
+}
+
+
