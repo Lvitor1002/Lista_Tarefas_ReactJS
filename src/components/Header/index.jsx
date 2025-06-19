@@ -6,12 +6,7 @@ import { Link } from 'react-router-dom'
 
 export default function Header(){
 
-    const [opcoesAbertas,setOpcoesAbertas] = useState(false)
     const [barraAberta, setBarraAberta] = useState(true)
-
-    const alternarOpcoes = () =>{
-        setOpcoesAbertas(!opcoesAbertas)
-    }
 
     const alternarBarra  = () => {
         setBarraAberta(!barraAberta)
@@ -48,28 +43,7 @@ export default function Header(){
                                 </Link>
                             </li>
 
-                        
-                        <div className="controleOpcoes" onClick={alternarOpcoes}>
-
-                            <div className="controleGrupos">
-
-                                <i className='bi bi-folder-fill'></i>
-
-                                <h2>Categorias</h2>
-
-                                <i className={`${opcoesAbertas ? 'bi bi-chevron-up' : 'bi bi-chevron-down'}`}></i>
-                            </div>
-
-                            {opcoesAbertas && (
-                                <ul className="opcoes">
-                                    <li>Esporte</li>
-                                    <li>Casa</li>
-                                    <li>Construção</li>
-                                    <li>Estudos</li>
-                                    <li>Lazer</li>
-                                </ul>
-                            )}
-                        </div>
+                    
 
                     </ul>
                 </nav>

@@ -1,7 +1,7 @@
 import './Tarefas.css'
 import Swal from 'sweetalert2'
 import { ApiRepository } from '../../services/ApiRepository'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 
 export default function Tarefas() {
 
@@ -9,8 +9,10 @@ export default function Tarefas() {
     const [exibirFormulario, setExibirFormulario] = useState(false) 
     const [editando, setEditando] = useState(null)
     const [inputsFormularios,setInputsFormularios] = useState({tarefa:'',categoria:''})
-    const [tarefasFiltradas, setPesquisadas] = useState([])
     const [termoPesquisa, setTermoPesquisa] = useState('') 
+
+    const [filtroAtivo, setFiltroAtivo] = useState('todas')
+    const [tarefasConcluidas, setTarefasConcluidas] = useState({})
 
     const fecharFormulario = () => {
         setExibirFormulario(false)
@@ -23,7 +25,28 @@ export default function Tarefas() {
             const dadosArray = Array.isArray(dados) ? dados : []
             
             setTarefas(dadosArray)
-            setPesquisadas(dadosArray)
+
+            // Atualiza o estado 'tarefasConcluidas'. Recebe o estado anterior (prev) como argumento.
+            setTarefasConcluidas(prev => {
+
+
+                // Cria uma cópia do estado anterior para não modificar o original diretamente (imutabilidade).
+                const novasConclusoes = {...prev}
+
+                
+                dadosArray.forEach(t => {
+
+                    // Se a tarefa com o id 't.id' ainda não existir no estado (não tiver valor de conclusão registrado):
+                    if(novasConclusoes[t.id] === undefined){
+
+                        // Adiciona a tarefa ao estado com valor inicial 'false' (indicando que ainda não foi concluída).
+                        novasConclusoes[t.id] = false
+                    }
+                })
+                
+                // Retorna o novo objeto de tarefas concluídas, que o React usará para atualizar o estado.
+                return novasConclusoes
+            })
 
         }catch(erro){
 
@@ -136,21 +159,55 @@ export default function Tarefas() {
     function pesquisarTarefa(termo){
         
         setTermoPesquisa(termo)
-
-        if(!termo.trim()){
-            // Mostra todas se o campo estiver vazio
-            setPesquisadas(tarefas)
-            return
-        }
-
-        const termoLower = termo.toLowerCase()
-        const filtradas = tarefas.filter(tarefa=>
-            tarefa.nomeTarefa.toLowerCase().includes(termoLower) ||
-            tarefa.categoria.toLowerCase().includes(termoLower)
-        )
-        setPesquisadas(filtradas)
-
+    
     }
+
+    // Função para alternar o estado de conclusão de uma tarefa
+    function alternarConclusao (id){
+
+        // Atualiza o estado 'tarefasConcluidas' de forma funcional (baseado no valor anterior)
+        setTarefasConcluidas(prev => ({
+
+            // Mantém o estado atual para todas as outras tarefas
+            ...prev,   
+
+            // Inverte o estado (true/false) da tarefa com o id fornecido
+            [id]: !prev[id]
+        }))
+    }
+
+    // Calcula as tarefas a serem exibidas com base nos filtros
+    const tarefasExibidas  = useMemo(()=>{
+
+        // Filtra a lista de tarefas de acordo com os critérios
+        return tarefas.filter(t => {
+
+            // Converte o termo de pesquisa para minúsculo (para busca case-insensitive)
+            const termo = termoPesquisa.toLowerCase()
+            
+            // Verifica se o nome da tarefa ou a categoria contém o termo pesquisado
+            const correspondeTermo = t.nomeTarefa.toLowerCase().includes(termo) || 
+                                    t.categoria.toLowerCase().includes(termo)
+            
+            // Verifica se a tarefa está marcada como concluída (busca no estado tarefasConcluidas)
+            const estaConcluida = tarefasConcluidas[t.id] || false
+
+            if (filtroAtivo === 'pendentes') 
+            {
+                return correspondeTermo && !estaConcluida;
+            } 
+
+            else if (filtroAtivo === 'finalizadas') 
+            {
+                return correspondeTermo && estaConcluida;
+            }
+
+            // Caso o filtro seja "todas", exibe qualquer tarefa que corresponda ao termo
+            return correspondeTermo
+        })
+
+    // Dependências do useMemo: recalcula só quando algum destes mudar
+    },[tarefas, termoPesquisa, filtroAtivo, tarefasConcluidas])
 
 
 
@@ -171,47 +228,80 @@ export default function Tarefas() {
                         />
 
                         <div className="grupoFiltros">
-                            <button type='button'>Todas</button>
-                            <button type='button'>Finalizadas</button>
-                            <button type='button'>Pendentes</button>
+
+                            <button 
+                                type='button'
+                                className={filtroAtivo === 'todas' ? 'ativo' : ''}
+                                onClick={() => setFiltroAtivo('todas')}
+                            
+                            >   Todas
+                            </button>
+
+                            <button 
+                                type='button'
+                                className={filtroAtivo === 'finalizadas' ? 'ativo' : ''}
+                                onClick={() => setFiltroAtivo('finalizadas')}
+                            
+                            >   Finalizadas
+                            </button>
+
+                            <button 
+                                type='button'
+                                className={filtroAtivo === 'pendentes' ? 'ativo' : ''}
+                                onClick={() => setFiltroAtivo('pendentes')}
+                            
+                            >   Pendentes
+                            </button>
+
                         </div>
                     </div>
                     
-                        {tarefasFiltradas.map((t)=>(
+                        {tarefasExibidas.map((t)=>{
 
-                            <div className="campoTarefas" key={t.id}>
+                            const estaConcluida = tarefasConcluidas[t.id] || false
+
+                            return(
+
+                                <div 
+                                    className={`campoTarefas ${estaConcluida ? 'concluida' : '' }`} 
+
+                                    key={t.id}>
 
 
-                                <div className="checkNome">
-                                    <input 
-                                        type="checkbox" 
-                                        name="tarefa" 
-                                        id={`tarefa-${t.id}`}
+                                    <div className="checkNome">
+                                        <input 
+                                            type="checkbox" 
+                                            name="tarefa" 
+                                            id={`tarefa-${t.id}`}
+                                            checked={estaConcluida}
+                                            onChange={() => alternarConclusao(t.id)}
+                                            
+                                        />
                                         
-                                    />
-                                    
-                                    
-                                    <label htmlFor={`tarefa-${t.id}`}>
-                                        Categoria: {t.categoria}
-                                    </label>
+                                        
+                                        <label htmlFor={`tarefa-${t.id}`}>
+                                            Categoria: {t.categoria}
+                                        </label>
 
-                                    <label htmlFor={`tarefa-${t.id}`}>
-                                        Tarefa: {t.nomeTarefa}
-                                    </label>
-                                    
+                                        <label htmlFor={`tarefa-${t.id}`}>
+                                            Tarefa: {t.nomeTarefa}
+                                        </label>
+                                        
+                                    </div>
+
+                                    <div className="acoes">
+                                        <i className="bi bi-pen-fill editar" onClick={()=>{
+                                            setExibirFormulario(true)
+                                            iniciarEdicao(t)
+                                        }}></i>
+
+                                        <i className="bi bi-trash2-fill remover" onClick={() => remover(t.id)}></i>
+                                    </div>
+
                                 </div>
+                            )
 
-                                <div className="acoes">
-                                    <i className="bi bi-pen-fill editar" onClick={()=>{
-                                        setExibirFormulario(true)
-                                        iniciarEdicao(t)
-                                    }}></i>
-                                    <i className="bi bi-trash2-fill remover" onClick={() => remover(t.id)}></i>
-                                </div>
-
-                            </div>
-
-                        ))}
+                        })}
 
                     
                     <button 
@@ -297,3 +387,5 @@ export default function Tarefas() {
 
     )
 }
+
+https://www.youtube.com/watch?v=Sl_tsr2gEhE
