@@ -71,7 +71,23 @@ export default function Tarefas() {
         else{
 
             try{
-    
+                const tarefaTratada = inputsFormularios.tarefa?.trim()
+                if(!tarefaTratada){
+                    Swal.fire({
+                        icon: "info",
+                        title: "Oops...",
+                        text: `Campo tarefa vazio ou incorreto..`,
+                    })
+                    return
+                }
+                if(!inputsFormularios.categoria || inputsFormularios.categoria.trim() === ""){
+                    Swal.fire({
+                        icon: "info",
+                        title: "Oops...",
+                        text: `Selecione uma categoria..`,
+                    })
+                    return
+                }
                 await new ApiRepository().criarTarefa(tarefa,categoria)
     
                 await carregarTarefas()
@@ -139,6 +155,24 @@ export default function Tarefas() {
 
     async function editar(editando_id){
         try{
+            const tarefaTratada = inputsFormularios.tarefa?.trim();
+
+            if(!tarefaTratada){
+                Swal.fire({
+                    icon: "info",
+                    title: "Oops...",
+                    text: `Campo tarefa vazio ou incorreto..`,
+                })
+                return
+            }
+            if(!inputsFormularios.categoria || inputsFormularios.categoria.trim() === ""){
+                Swal.fire({
+                    icon: "info",
+                    title: "Oops...",
+                    text: `Selecione uma categoria..`,
+                })
+                return
+            }
 
             await new ApiRepository().atualizarTarefa(inputsFormularios.tarefa,inputsFormularios.categoria,editando_id)
 
@@ -333,7 +367,7 @@ export default function Tarefas() {
                     <input 
                         type="text" 
                         placeholder='Digite uma tarefa..'
-                        required
+                    
                         value={inputsFormularios.tarefa}
                         onChange={(e) => setInputsFormularios(prev => ({
                             ...prev,
@@ -343,7 +377,7 @@ export default function Tarefas() {
 
                     <select 
                         name="categoria" 
-                        required
+                        
                         value={inputsFormularios.categoria}
                         onChange={(e) => setInputsFormularios(prev => ({
                             ...prev,

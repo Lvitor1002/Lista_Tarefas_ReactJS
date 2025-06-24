@@ -97,6 +97,7 @@
 @media screen and (max-width: 500px){
     .controleHome{
         width: 100%;
+        height: 100vh;
     }
     .controleHome .textos{
         width: 100%;
@@ -112,6 +113,6 @@
         width: 200px;
         font-size: 2rem;
         padding: 2%;
-        
+
     } 
 }
