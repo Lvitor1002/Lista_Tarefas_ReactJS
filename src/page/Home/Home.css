@@ -8,6 +8,9 @@
     align-items: center;
     flex-direction: column;
     background-color: rgb(237, 248, 79);
+    position: relative;
+    right: 30px;
+    z-index: -0;
 }
 .controleHome .textos{
     border-radius: 50px;
@@ -92,7 +95,13 @@
     
 }
 @media screen and (max-width: 500px){
-
+    .controleHome{
+        width: 100%;
+    }
+    .controleHome .textos{
+        width: 100%;
+        margin-top: 80px;
+    }
     .controleHome h1{
     font-size: 3rem;
     }

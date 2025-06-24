@@ -9,6 +9,10 @@
     flex-direction: column;
     background-color: rgb(237, 248, 79);
     transition: all .5s;
+
+    position: relative;
+    right: 30px;
+    z-index: -0;
 }
 
 .tarefas{
@@ -185,8 +189,8 @@
 
 .formulario{
     border-radius: 50px;
-    width: 50%;
-    height: 500px;
+    width: 80%;
+    height: 600px;
     padding: 20px;
     background-color: white;
 
@@ -236,6 +240,7 @@
     align-items: center;
     flex-direction: row;
     gap: 20px;
+    transition: all .5s;
 }
 .formulario button{
     font-size: 1.2rem;
@@ -289,12 +294,7 @@
     .checkNome label{
         font-size: 1.1rem;
     }
-    .formulario{
-        width: 80%;
-        height: 600px;
-        position: relative;
-        left: 2%;
-    }
+    
     
 }
 @media screen and (max-width: 657px){
@@ -310,6 +310,10 @@
     }
     .tarefas h2{
         font-size: 2rem;
+    }
+    .tarefas{
+        width: 100%;
+        margin-top: 80px;
     }
     .checkNome label{
         font-size: .8rem;
@@ -339,6 +343,17 @@
     }
     .remover{
         padding-right: 0px;
+    }
+    .formulario h3{
+        font-size: 2.5rem;
+    }
+    .botoes{
+        flex-direction: column;
+        width: 80%;
+        
+    }
+    .formulario button{
+        width: 100%;
     }
     
     
