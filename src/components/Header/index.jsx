@@ -1,54 +1,64 @@
-import { useState } from 'react'
 import './Header.css'
-import { Link } from 'react-router-dom'
+import {Sidebar} from '../Sidebar'
+import * as Fa from "react-icons/fa";
+import * as Ai from "react-icons/ai";
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+
+
 
 
 
 export default function Header(){
 
-    const [barraAberta, setBarraAberta] = useState(true)
+    const [sidebar, setSidebar] = useState(false)
 
-    const alternarBarra  = () => {
-        setBarraAberta(!barraAberta)
-    }
+    const alternarSidebar = () => setSidebar(prev => !prev)
 
     return(
-        <>
-            
-            <div className={`controleHeader ${barraAberta ? '' : 'recolhido'}`}>
-                
-                {barraAberta ? (
-                    <i className="bi bi-chevron-left fechar" onClick={alternarBarra}></i>
-                ) : (
-                    <i className="bi bi-chevron-right abrir" onClick={alternarBarra}></i>
-                )}
+            <div className="controleHeader">
 
-                
+                <Link to="#" className="iconeMenu">
 
+                    <Fa.FaBars onClick={alternarSidebar}/>
 
-                <div className="controleMenu">
+                </Link>
 
-                    <Link to="/">
-                        <img src="./logo.png" alt="Logo Image" />
-                    </Link>
+                <nav className={sidebar ? 'opcoesMenu ativo' : 'opcoesMenu'}>
 
-                </div>
+                    <ul className='opcoesMenu-items'>
 
-                <nav>
-                    <ul>
-                            <li className="controleGrupos">
-                                <i className="bi bi-clipboard2-check-fill"></i>
-                                <Link to="tarefas">
-                                    <h2>Tarefas</h2>
-                                </Link>
-                            </li>
+                        <li className='alternarIcone'>
+                            
+                            {/* Fechar menu ao clicar no "X" */}
+                            <Link to="#" className="iconeMenu" onClick={alternarSidebar}>
 
-                    
+                                <Ai.AiOutlineClose />
 
+                            </Link>
+                        </li>
+                        
+                        {Sidebar.map((item, index) => {
+
+                            return(
+                                <li key={index} className={item.classeNome}>
+                                    
+                                    <Link to={item.caminho} onClick={alternarSidebar}>
+
+                                        {item.icone}
+                                        <span>{item.titulo}</span>
+
+                                    </Link>
+                                </li>
+                            )
+
+                        })}
                     </ul>
                 </nav>
 
+                {sidebar && <div className="overlay" onClick={alternarSidebar} />}
+
+
             </div>
-        </>
     )
 }
